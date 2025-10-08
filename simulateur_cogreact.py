@@ -16,7 +16,7 @@ t_perception = 75 + random.gauss(0, 25)           # constant
 t_identification = 200 + random.gauss(0, 50)      # frequence/longueur/concretude
 t_comparaison = 150 + random.gauss(0, 50)         # similarite/charge cognitive
 t_decision = 150 + random.gauss(0, 25)            # meme + rapide que different ?
-t_motrice = 200 + random.gauss(0, 50)             # si meme bouton a la suite + rapide
+t_motrice = 200 + random.gauss(0, 30)             # si meme bouton a la suite + rapide
 
 t_total = (
     t_perception
@@ -75,7 +75,7 @@ for mot_affiche in mots_affiches:
     t_identification_corrige = 200 + random.gauss(0, 50)
     t_motrice_corrige = 200 + random.gauss(0, 50)
 
-    t_comparaison_corrige = (similarite * 150) + random.gauss(0, 30)
+    t_comparaison_corrige = (similarite * 150) + random.gauss(0, 20)
 
     if mot_cible == mot_courant:
         t_decision_corrige = t_decision - random.gauss(0, 20)
