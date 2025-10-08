@@ -5,6 +5,18 @@
 import random
 from similarite_orthographique import similarite_orthographique_avancee_ponderee
 
+import pandas as pd
+import numpy as np
+
+lexique = pd.read_csv("Lexique383.tsv", sep="\t", encoding="utf-8")
+
+def get_freq_livre(mot):
+    row = lexique[lexique["ortho"] == mot.lower()]
+    if not row.empty:
+        return row.iloc[0]["freqlivres"]
+    else:
+        return 0
+
 ###########################
 ##   Variables globales  ##
 ###########################
@@ -72,14 +84,18 @@ for mot_affiche in mots_affiches:
     similarite = similarite_orthographique_avancee_ponderee(mot_cible, mot_courant)
 
     t_perception_corrige = 75 + random.gauss(0, 25)
-    t_identification_corrige = 200 + random.gauss(0, 50)
-    t_motrice_corrige = 200 + random.gauss(0, 50)
-
-    t_comparaison_corrige = (similarite * 150) + random.gauss(0, 20)
+    freq = get_freq_livre(mot_affiche)
+    log_freq = np.log(freq + 1)
+    t_identification_corrige = 220 - 15 * log_freq + 2 * len(mot_affiche) + random.gauss(0, 20)
+    t_motrice_corrige = 200 + random.gauss(0, 20)
 
     if mot_cible == mot_courant:
+        # Si le mot est identique au mot cible, la comparaison est quasi immédiate
+        t_comparaison_corrige = 30 + random.gauss(0, 10)
         t_decision_corrige = t_decision - random.gauss(0, 20)
     else:
+        # Sinon, la comparaison dépend de la similarité (plus c'est proche, plus c'est lent)
+        t_comparaison_corrige = max(10, (similarite * 150) + random.gauss(0, 20))
         t_decision_corrige = t_decision + random.gauss(0, 20)
 
     t_total_corrige = (
@@ -90,7 +106,7 @@ for mot_affiche in mots_affiches:
         + t_motrice_corrige
     )
 
-    print(f"{mot_affiche:<12} | Simil : {similarite:.2f} | Percep : {round(t_perception_corrige):>3} | ID : {round(t_identification_corrige):>3} | Comp : {round(t_comparaison_corrige):>3} | Dec : {round(t_decision_corrige):>3} | Motr : {round(t_motrice_corrige):>3} | Total : {round(t_total_corrige):>4} ms")
+    print(f"{mot_affiche:<14} | Simil : {similarite:>4.2f} | Freq : {freq:>6.1f} | Percep : {round(t_perception_corrige):>3} | ID : {round(t_identification_corrige):>3} | Comp : {round(t_comparaison_corrige):>4} | Dec : {round(t_decision_corrige):>3} | Motr : {round(t_motrice_corrige):>3} | Total : {round(t_total_corrige):>4} ms")
 
     total_temps += t_total_corrige
 
