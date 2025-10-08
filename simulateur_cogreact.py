@@ -77,6 +77,8 @@ mots_affiches = [
     "revoir", "bientôt", "demain"
 ]
 
+resultats = []
+
 total_temps = 0
 
 for mot_affiche in mots_affiches:
@@ -110,6 +112,18 @@ for mot_affiche in mots_affiches:
 
     total_temps += t_total_corrige
 
+    resultats.append({
+        "mot": mot_affiche,
+        "similarite": similarite,
+        "freq": freq,
+        "perception": t_perception_corrige,
+        "identification": t_identification_corrige,
+        "comparaison": t_comparaison_corrige,
+        "decision": t_decision_corrige,
+        "motrice": t_motrice_corrige,
+        "total": t_total_corrige
+    })
+
 moyenne_temps = total_temps / len(mots_affiches)
 print(f"\nTemps moyen (TR simulé) : {round(moyenne_temps)} ms")
 
@@ -131,3 +145,67 @@ print(f"Décision          : {round(t_decision_corrige)}")
 print(f"Motrice           : {round(t_motrice_corrige)}")
 print(f"→ Temps total     : {round(t_total_corrige)} ms")
 '''
+
+import matplotlib.pyplot as plt
+
+# Crée une DataFrame pour les résultats
+df_resultats = pd.DataFrame(resultats)
+
+# Ajout LOWESS pour fréquence et similarité
+from statsmodels.nonparametric.smoothers_lowess import lowess
+
+x = df_resultats["freq"]
+y = df_resultats["total"]
+colors = ["red" if mot == mot_cible else "blue" for mot in df_resultats["mot"]]
+
+# LOWESS pour fréquence
+smoothed_freq = lowess(y, x, frac=0.5)
+plt.figure(figsize=(10, 6))
+plt.scatter(x, y, c=colors)
+for i, row in df_resultats.iterrows():
+    color = "red" if row["mot"] == mot_cible else "blue"
+    plt.annotate(row["mot"], (row["freq"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
+plt.plot(smoothed_freq[:, 0], smoothed_freq[:, 1], color='green', label='LOWESS')
+# Régression linéaire
+slope, intercept = np.polyfit(x, y, 1)
+x_sorted = np.sort(x)
+y_fit = slope * x_sorted + intercept
+plt.plot(x_sorted, y_fit, linestyle='--', color='black', label='Régression linéaire')
+plt.xlabel("Fréquence (freqlivres)")
+plt.ylabel("Temps total simulé (ms)")
+plt.title("Relation entre fréquence et TR (LOWESS)")
+plt.legend()
+plt.grid(True)
+
+# LOWESS pour similarité
+df_sim = df_resultats[df_resultats["mot"] != mot_cible]
+
+x_sim = df_sim["similarite"]
+y_sim = df_sim["total"]
+smoothed_sim = lowess(y_sim, x_sim, frac=0.5)
+plt.figure(figsize=(10, 6))
+sim_colors = ["blue" for _ in x_sim]
+plt.scatter(x_sim, y_sim, c=sim_colors)
+for i, row in df_sim.iterrows():
+    plt.annotate(row["mot"], (row["similarite"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color='blue')
+plt.plot(smoothed_sim[:, 0], smoothed_sim[:, 1], color='green', label='LOWESS')
+# Régression linéaire
+slope_sim, intercept_sim = np.polyfit(x_sim, y_sim, 1)
+x_sim_sorted = np.sort(x_sim)
+y_sim_fit = slope_sim * x_sim_sorted + intercept_sim
+plt.plot(x_sim_sorted, y_sim_fit, linestyle='--', color='black', label='Régression linéaire')
+plt.xlabel("Similarité orthographique")
+plt.ylabel("Temps total simulé (ms)")
+plt.title("Relation entre similarité et TR (LOWESS)")
+plt.legend()
+plt.grid(True)
+
+# Afficher toutes les figures simultanément
+from matplotlib import pyplot as plt
+
+manager1 = plt.figure(1).canvas.manager
+manager1.set_window_title("Fréquence vs TR")
+manager2 = plt.figure(2).canvas.manager
+manager2.set_window_title("Similarité vs TR")
+
+plt.show()
