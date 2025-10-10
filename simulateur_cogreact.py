@@ -15,6 +15,7 @@ en prenant en compte plusieurs composantes temporelles :
 ###########################
 
 import random
+import time
 from similarite_orthographique import similarite_orthographique_avancee_ponderee
 
 import pandas as pd
@@ -105,15 +106,17 @@ moyenne_temps = total_temps / len(mots_affiches)
 print(f"\nTemps moyen (TR simulé) : {round(moyenne_temps)} ms")
 
 ############################
-##   Affichage graphique  ##
+##  Graphiques et export  ##
 ############################
 
 df_resultats = pd.DataFrame(resultats)
 
 rep_export = input("Exporter les données sous forme CSV ? (y/N) : ").strip().lower()
 if rep_export == 'y':
-    df_resultats.to_csv("resultats_simulation.csv", index=False, encoding='utf-8')
-    print("'resultats_simulation.csv' exporté dans le dossier courant.")
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    filename = f"resultats_simulation_{timestamp}.csv"
+    df_resultats.to_csv(filename, index=False, encoding='utf-8')
+    print(f"'{filename}' exporté dans le dossier courant.")
 
 rep = input("Afficher les graphiques ? (y/N) : ").strip().lower()
 show_plots = (rep == 'y')
