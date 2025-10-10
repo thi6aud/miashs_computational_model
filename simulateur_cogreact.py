@@ -108,14 +108,17 @@ print(f"\nTemps moyen (TR simulé) : {round(moyenne_temps)} ms")
 ##   Affichage graphique  ##
 ############################
 
-# Demande à l'utilisateur s'il souhaite afficher les graphiques
+df_resultats = pd.DataFrame(resultats)
+
+rep_export = input("Exporter les données sous forme CSV ? (y/N) : ").strip().lower()
+if rep_export == 'y':
+    df_resultats.to_csv("resultats_simulation.csv", index=False, encoding='utf-8')
+    print("'resultats_simulation.csv' exporté dans le dossier courant.")
+
 rep = input("Afficher les graphiques ? (y/N) : ").strip().lower()
 show_plots = (rep == 'y')
 
 if show_plots:
-    # Crée une DataFrame pour les résultats
-    df_resultats = pd.DataFrame(resultats)
-
     # Ajout LOWESS pour fréquence et similarité (statsmodels requis)
     try:
         from statsmodels.nonparametric.smoothers_lowess import lowess
@@ -178,5 +181,3 @@ if show_plots:
     plt.grid(True)
 
     plt.show()
-else:
-    print("Graphiques ignorés — exécution terminée sans affichage des figures.")

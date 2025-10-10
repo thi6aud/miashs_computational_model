@@ -7,13 +7,18 @@
     <title>Test CogReact</title>
 </head>
 <body>
-    <center>
-    <h1>Expérience CogReact</h1>
-    <p>Des mots vont s'afficher les uns après les autres.</p>
-    <p>Vous avez un mot cible à détecter parmis les mots qui s'affichent.</p>
-    <p>Si le mot affiché est le mot cible, cliquez sur 'meme' sinon 'different'.</p>
-    <br>
-    <button onclick="startTest()">Commencer le test</button>
-    </center>
+    <div class="bg-image"></div>
+    <div class="container">
+        <h1>TEST COGREACT</h1>
+        <p class="rules">
+            Règles de l’expérience :<br>
+            Vous allez voir s'afficher un <strong>mot cible</strong> puis une <strong>série de mots</strong> au centre de l'écran.<br>
+            - Appuyez sur <strong>F</strong> si le mot affiché est <em>différent</em> du mot cible.<br>
+            - Appuyez sur <strong>J</strong> si le mot affiché est le <em>même</em> que le mot cible.<br>
+           L'objectif est d'aller le plus <strong>vite</strong> possible <strong>sans</strong> se tromper.
+        </p>
+        <button class="border-gradient" onclick="startTest()">Commencer le test</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

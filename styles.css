@@ -1,19 +1,64 @@
-/* Use a solid black background and ensure foreground text contrasts */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 body {
-  background-color: #000000; /* solid black background */
-  background-image: none;    /* disable any background image */
-  color: #ffffff;            /* make text white for contrast */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; /* fond blanc sous l'image */
+    overflow: hidden; /* évite tout scroll pendant l'anim */
 }
 
-center { /* better default spacing */
-  display: block;
-  text-align: center;
-  padding: 2rem;
+.bg-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('4kbg.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1; /* visible au début */
+    transition: opacity 1.5s ease; /* fondu fluide */
+    z-index: -1;
 }
 
+h1 {
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 3em;
+    text-align: center;
+}
+
+button {
+    position: relative;
+    margin-top: 20px;
+    padding: 12px 28px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 0;
+    transition: transform 0.2s ease;
+    align-self: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.rules {
+    color: white;
+    font-size: 1.2em;
+    margin: 20px 0;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
+}
