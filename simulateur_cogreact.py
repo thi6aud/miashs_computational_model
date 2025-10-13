@@ -17,12 +17,15 @@ en prenant en compte plusieurs composantes temporelles :
 import random
 import time
 from similarite_orthographique import similarite_orthographique_avancee_ponderee
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import json
+
+############################
+##   Chargement donnees   ##
+############################
+
 with open("stimuli.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
@@ -33,9 +36,10 @@ with open("stimuli.json", "r", encoding="utf-8") as f:
 lexique = pd.read_csv("Lexique383.tsv", sep="\t", encoding="utf-8")
 
 def get_freq_livre(mot):
-    row = lexique[lexique["ortho"] == mot.lower()]
-    if not row.empty:
-        return row.iloc[0]["freqlivres"]
+    rows = lexique[lexique["ortho"] == mot.lower()]
+    if not rows.empty:
+        # On somme les fréquences si plusieurs lignes existent
+        return rows["freqlivres"].sum()
     else:
         return 0  # Mot inconnu
 
@@ -46,9 +50,15 @@ def get_freq_livre(mot):
 mot_cible = data["mot_cible"]
 mots_affiches = data["mots_affiches"]
 
-
 # Paramètres de base pour tirer du bruit (utilisés pour génération)
 t_decision = 150 + random.gauss(0, 25)  # valeur de base (sera modifiée par essai)
+
+############################
+##    Entete affichage    ##
+############################
+
+print(f"{'Mot':<12} | {'Simil':>5} | {'Freq':>7} | {'Percep':>6} | {'ID':>4} | {'Comp':>4} | {'Dec':>4} | {'Motr':>4} | {'Total':>5}")
+print("-" * 75)
 
 ############################
 ##     Test liste mots    ##
@@ -64,8 +74,9 @@ for mot_affiche in mots_affiches:
     # bruitables
     t_perception = 75 + random.gauss(0, 25)
     freq = get_freq_livre(mot_affiche)
+    non_mot = (freq == 0)
     log_freq = np.log(freq + 1)
-    t_identification = 220 - 15 * log_freq + 2 * len(mot_affiche) + random.gauss(0, 20)
+    t_identification = 220 - 15 * log_freq + 2 * len(mot_affiche) + (80 if non_mot else 0) + random.gauss(0, 20)
     t_motrice = 200 + random.gauss(0, 20)
 
     if mot_cible == mot_courant:
@@ -85,10 +96,13 @@ for mot_affiche in mots_affiches:
         + t_motrice
     )
 
-    print(f"{mot_affiche:<14} | Simil : {similarite:>4.2f} | Freq : {freq:>6.1f} | Percep : {round(t_perception):>3} | ID : {round(t_identification):>3} | Comp : {round(t_comparaison):>4} | Dec : {round(t_decision):>3} | Motr : {round(t_motrice):>3} | Total : {round(t_total):>4} ms")
+    # Affichage des résultats
+    print(f"{mot_affiche:<12} | {similarite:5.2f} | {freq:7.2f} | {round(t_perception):6} | {round(t_identification):4} | {round(t_comparaison):4} | {round(t_decision):4} | {round(t_motrice):4} | {round(t_total):5} ms")
 
+    # Accumulation du temps total pour moyenne
     total_temps += t_total
 
+    # Stockage des résultats pour export et analyse
     resultats.append({
         "mot": mot_affiche,
         "similarite": similarite,
@@ -101,6 +115,7 @@ for mot_affiche in mots_affiches:
         "total": t_total
     })
 
+# Calcul et affichage du temps moyen
 moyenne_temps = total_temps / len(mots_affiches)
 print(f"\nTemps moyen (TR simulé) : {round(moyenne_temps)} ms")
 
@@ -181,5 +196,4 @@ if show_plots:
     plt.title("Relation entre similarité et TR")
     plt.legend()
     plt.grid(True)
-
     plt.show()
