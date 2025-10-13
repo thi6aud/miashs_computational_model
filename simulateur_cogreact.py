@@ -225,3 +225,43 @@ if show_plots:
     plt.legend(handles=legend_elements_sim + plt.gca().get_legend_handles_labels()[0], loc="upper right")
     plt.grid(True)
     plt.show()
+
+    # 1. Fréquence vs Temps d'identification
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df_resultats["freq"], df_resultats["identification"], c=colors)
+    for i, row in df_resultats.iterrows():
+        color = "red" if row["mot"] == mot_cible else "purple" if row["freq"] == 0 else "blue"
+        plt.annotate(row["mot"], (row["freq"], row["identification"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
+    plt.xlabel("Fréquence (freqlivres)")
+    plt.ylabel("Temps d'identification (ms)")
+    plt.title("Fréquence vs Temps d'identification")
+    plt.grid(True)
+    plt.show()
+
+    # 2. Similarité vs Temps de comparaison (hors mot cible)
+    plt.figure(figsize=(10, 6))
+    x_comp = df_sim["similarite"]
+    y_comp = df_sim["comparaison"]
+    colors_comp = ["purple" if row["freq"] == 0 else "blue" for _, row in df_sim.iterrows()]
+    plt.scatter(x_comp, y_comp, c=colors_comp)
+    for i, row in df_sim.iterrows():
+        color = "purple" if row["freq"] == 0 else "blue"
+        plt.annotate(row["mot"], (row["similarite"], row["comparaison"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
+    plt.xlabel("Similarité orthographique")
+    plt.ylabel("Temps de comparaison (ms)")
+    plt.title("Similarité vs Temps de comparaison")
+    plt.grid(True)
+    plt.show()
+
+    # 3. Longueur du mot vs Temps d'identification
+    df_resultats["longueur"] = df_resultats["mot"].apply(len)
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df_resultats["longueur"], df_resultats["identification"], c=colors)
+    for i, row in df_resultats.iterrows():
+        color = "red" if row["mot"] == mot_cible else "purple" if row["freq"] == 0 else "blue"
+        plt.annotate(row["mot"], (row["longueur"], row["identification"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
+    plt.xlabel("Longueur du mot (nb lettres)")
+    plt.ylabel("Temps d'identification (ms)")
+    plt.title("Longueur du mot vs Temps d'identification")
+    plt.grid(True)
+    plt.show()
