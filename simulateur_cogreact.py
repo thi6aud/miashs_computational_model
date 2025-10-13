@@ -146,14 +146,27 @@ if show_plots:
     # --- Fréquence vs Total ---
     x = df_resultats["freq"]
     y = df_resultats["total"]
-    colors = ["red" if mot == mot_cible else "blue" for mot in df_resultats["mot"]]
+    colors = []
+    for _, row in df_resultats.iterrows():
+        if row["mot"] == mot_cible:
+            colors.append("red")
+        elif row["freq"] == 0:
+            colors.append("purple")
+        else:
+            colors.append("blue")
 
+    # Graphique de dispersion
     plt.figure(figsize=(10, 6))
     plt.scatter(x, y, c=colors)
     for i, row in df_resultats.iterrows():
-        color = "red" if row["mot"] == mot_cible else "blue"
+        if row["mot"] == mot_cible:
+            color = "red"
+        elif row["freq"] == 0: 
+            color = "purple"
+        else: color = "blue"
         plt.annotate(row["mot"], (row["freq"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
 
+    # LOWESS
     if lowess is not None:
         smoothed_freq = lowess(y, x, frac=0.5)
         plt.plot(smoothed_freq[:, 0], smoothed_freq[:, 1], color='green', label='LOWESS')
@@ -171,15 +184,26 @@ if show_plots:
     plt.legend()
     plt.grid(True)
 
+    # Ajout légende couleurs des points
+    from matplotlib.lines import Line2D
+    legend_elements = [
+        Line2D([0], [0], marker='o', color='w', label='Mot cible', markerfacecolor='red', markersize=8),
+        Line2D([0], [0], marker='o', color='w', label='Mot', markerfacecolor='blue', markersize=8),
+        Line2D([0], [0], marker='o', color='w', label='Non-mot', markerfacecolor='purple', markersize=8)
+    ]
+    plt.legend(handles=legend_elements + plt.gca().get_legend_handles_labels()[0], loc="upper right")
+
     # --- Similarité vs Total (exclut le mot cible) ---
     df_sim = df_resultats[df_resultats["mot"] != mot_cible]
     x_sim = df_sim["similarite"]
     y_sim = df_sim["total"]
 
+    colors_sim = ["purple" if row["freq"] == 0 else "blue" for _, row in df_sim.iterrows()]
     plt.figure(figsize=(10, 6))
-    plt.scatter(x_sim, y_sim, c='blue')
+    plt.scatter(x_sim, y_sim, c=colors_sim)
     for i, row in df_sim.iterrows():
-        plt.annotate(row["mot"], (row["similarite"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color='blue')
+        color = "purple" if row["freq"] == 0 else "blue"
+        plt.annotate(row["mot"], (row["similarite"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
 
     if lowess is not None and len(x_sim) >= 2:
         smoothed_sim = lowess(y_sim, x_sim, frac=0.5)
@@ -194,6 +218,10 @@ if show_plots:
     plt.xlabel("Similarité orthographique")
     plt.ylabel("Temps total simulé (ms)")
     plt.title("Relation entre similarité et TR")
-    plt.legend()
+    legend_elements_sim = [
+        Line2D([0], [0], marker='o', color='w', label='Mot', markerfacecolor='blue', markersize=8),
+        Line2D([0], [0], marker='o', color='w', label='Non-mot', markerfacecolor='purple', markersize=8)
+    ]
+    plt.legend(handles=legend_elements_sim + plt.gca().get_legend_handles_labels()[0], loc="upper right")
     plt.grid(True)
     plt.show()
