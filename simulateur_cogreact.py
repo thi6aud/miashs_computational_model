@@ -22,6 +22,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+import json
+with open("stimuli.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
 ###########################
 ## Acces frequences mots ##
 ###########################
@@ -33,13 +37,15 @@ def get_freq_livre(mot):
     if not row.empty:
         return row.iloc[0]["freqlivres"]
     else:
-        return 0
+        return 0  # Mot inconnu
 
 ###########################
 ##      Parametres       ##
 ###########################
 
-mot_cible = "bonjour"
+mot_cible = data["mot_cible"]
+mots_affiches = data["mots_affiches"]
+
 
 # Paramètres de base pour tirer du bruit (utilisés pour génération)
 t_decision = 150 + random.gauss(0, 25)  # valeur de base (sera modifiée par essai)
@@ -47,13 +53,6 @@ t_decision = 150 + random.gauss(0, 25)  # valeur de base (sera modifiée par ess
 ############################
 ##     Test liste mots    ##
 ############################
-
-mots_affiches = [
-    "bonjour", "bonsoir", "salut", "coucou", "allo", "hey",
-    "merci", "plat", "moi", "pardon",
-    "oui", "non", "être", "certainement",
-    "revoir", "bientôt", "demain"
-]
 
 resultats = []
 total_temps = 0

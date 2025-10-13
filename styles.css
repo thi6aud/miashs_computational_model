@@ -46,6 +46,12 @@ button {
     align-self: center;
 }
 
+button:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.5s ease;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -61,4 +67,14 @@ button {
     margin: 20px 0;
     line-height: 1.5;
     font-family: Arial, sans-serif;
+}
+
+footer {
+    font-family: Arial, sans-serif;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 0.8em;
 }
