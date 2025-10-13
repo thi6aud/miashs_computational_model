@@ -168,7 +168,7 @@ if show_plots:
 
     # LOWESS
     if lowess is not None:
-        smoothed_freq = lowess(y, x, frac=0.5)
+        smoothed_freq = lowess(y, x, frac=0.6)
         plt.plot(smoothed_freq[:, 0], smoothed_freq[:, 1], color='green', label='LOWESS')
 
     # Régression linéaire
@@ -206,7 +206,7 @@ if show_plots:
         plt.annotate(row["mot"], (row["similarite"], row["total"]), textcoords="offset points", xytext=(5,5), ha='left', fontsize=9, color=color)
 
     if lowess is not None and len(x_sim) >= 2:
-        smoothed_sim = lowess(y_sim, x_sim, frac=0.5)
+        smoothed_sim = lowess(y_sim, x_sim, frac=0.6)
         plt.plot(smoothed_sim[:, 0], smoothed_sim[:, 1], color='green', label='LOWESS')
 
     if len(x_sim) >= 2:
