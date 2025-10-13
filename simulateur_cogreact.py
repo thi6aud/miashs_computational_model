@@ -44,7 +44,7 @@ def get_freq_livre(mot):
         return 0  # Mot inconnu
 
 ###########################
-##      Parametres       ##
+##     Setup donnees     ##
 ###########################
 
 mot_cible = data["mot_cible"]
