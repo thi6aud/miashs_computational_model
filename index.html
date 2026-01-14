@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expérience de Décision Lexicale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+            color: white;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -1;
+            transition: opacity 1.5s ease;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            max-width: 700px;
+        }
+
+        .instructions h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ul {
+            text-align: left;
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .instructions li {
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .instructions li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+        }
+
+        .key-info {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 1rem 3rem;
+            font-size: 1.3rem;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .test-area {
+            font-size: 2.5em;
+            text-align: center;
+            margin-top: 20vh;
+        }
+
+        .fixation {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+    
+    <div class="container">
+        <h1>Expérience de Décision Lexicale</h1>
+        
+        <p>Bienvenue dans cette expérience de psychologie cognitive.</p>
+        
+        <div class="instructions">
+            <h2>Instructions</h2>
+            <ul>
+                <li>Un mot cible vous sera présenté au début de l'expérience</li>
+                <li>Vous verrez ensuite une série de mots affichés un par un</li>
+                <li>Pour chaque mot, vous devez décider s'il s'agit du mot cible ou non</li>
+                <li>Répondez le plus rapidement possible</li>
+            </ul>
+            
+            <div class="key-info">
+                <div class="key">
+                    Touche <strong>F</strong> = OUI (c'est le mot cible)
+                </div>
+                <div class="key">
+                    Touche <strong>J</strong> = NON (ce n'est pas le mot cible)
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="startTest()">Commencer l'expérience</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
