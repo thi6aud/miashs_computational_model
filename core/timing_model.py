@@ -4,7 +4,6 @@ Modèle temporel pour les composantes du temps de réaction
 
 import random
 import numpy as np
-from similarite_orthographique import similarite_orthographique_avancee_ponderee
 from .data_loader import get_freq_livre, mot_cible
 
 
