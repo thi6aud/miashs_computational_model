@@ -5,7 +5,7 @@ Visualisation et analyse graphique des résultats
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from .data_loader import mot_cible
+from core.data_loader import mot_cible
 
 try:
     from statsmodels.nonparametric.smoothers_lowess import lowess
