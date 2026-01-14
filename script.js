@@ -1,12 +1,23 @@
 let mots = [];
 let motCible = "";
 
+// Fonction pour mélanger un tableau (Fisher-Yates shuffle)
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 fetch("stimuli_website.json")
   .then(response => response.json())
   .then(data => {
-    mots = data.mots_affiches;
+    // Les mots sont maintenant des objets {mot: "...", est_reel: true/false}
+    mots = shuffleArray(data.mots_affiches);
     motCible = data.mot_cible;
-    console.log("Stimuli chargés :", mots);
+    console.log("Stimuli chargés et mélangés :", mots);
   });
 
 // --- Étape 1 : Vérifions que tout fonctionne --- //
@@ -88,25 +99,52 @@ async function startTest() {
 
   // Affiche le mot cible
   testArea.textContent = `Le mot cible est : ${motCible}`;
-  await sleep(1200);
+  await sleep(2000);
 
   // Compte à rebours 3,2,1
   await showCountdown(testArea, [3, 2, 1], 1000);
 
   const resultats = [];
 
-  // Afficher les mots un par un, avancer sur pression de f ou j
+  // Afficher les mots un par un, attendre bonne réponse
   let index = 0;
   while (index < mots.length) {
-    const mot = mots[index];
-    testArea.textContent = mot;
+    const motObj = mots[index];
+    const motTexte = motObj.mot;
+    const estMotCible = (motTexte.toLowerCase() === motCible.toLowerCase());
+    const similarite = motObj.similarite;
+    
+    testArea.textContent = motTexte;
+    testArea.style.color = "black";
+    testArea.style.animation = "none";
 
     const t0 = performance.now(); // début chrono
-    const key = await waitForKey(["f", "j"]);
-    const t1 = performance.now(); // fin chrono
-
-    const tempsReaction = Math.round(t1 - t0);
-    resultats.push({ mot, touche: key, tempsReaction });
+    let reponseCorrecte = false;
+    let tentatives = 0;
+    
+    while (!reponseCorrecte) {
+      const key = await waitForKey(["f", "j"]);
+      tentatives++;
+      
+      // f = c'est le mot cible, j = ce n'est PAS le mot cible
+      const reponseUtilisateur = (key === "f");
+      
+      if (reponseUtilisateur === estMotCible) {
+        // Bonne réponse
+        reponseCorrecte = true;
+        const t1 = performance.now();
+        const tempsReaction = Math.round(t1 - t0);
+        resultats.push({ mot: motTexte, touche: key, tempsReaction, tentatives, similarite });
+      } else {
+        // Mauvaise réponse : animation tremblement + rouge
+        testArea.style.color = "red";
+        testArea.style.animation = "shake 0.5s";
+        await sleep(500);
+        testArea.style.animation = "none";
+        testArea.style.color = "black";
+      }
+    }
+    
     index += 1;
   }
 
@@ -115,8 +153,8 @@ async function startTest() {
 
   // --- Export CSV --- //
   const csvContent =
-    "mot,touche,tempsReaction(ms)\n" +
-    resultats.map(r => `${r.mot},${r.touche},${r.tempsReaction}`).join("\n");
+    "mot,touche,tempsReaction(ms),tentatives,similarite\n" +
+    resultats.map(r => `${r.mot},${r.touche},${r.tempsReaction},${r.tentatives},${r.similarite}`).join("\n");
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -161,10 +199,9 @@ async function startTest() {
     chartsLoaded = true;
 
     function createCharts() {
-      // Calculs de données simulées de fréquence/similarité pour l'exemple
-      // (à remplacer par des vraies valeurs si tu veux charger un Lexique côté web)
-      const similarites = resultats.map(r => Math.random() * 0.7);
-      const frequences = resultats.map(r => Math.random() * 700);
+      // Utiliser les vraies similarités des résultats
+      const similarites = resultats.map(r => r.similarite);
+      const frequences = resultats.map(r => Math.random() * 700); // TODO: ajouter vraies fréquences
 
       const temps = resultats.map(r => r.tempsReaction);
 

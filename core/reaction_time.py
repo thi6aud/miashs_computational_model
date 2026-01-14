@@ -31,9 +31,9 @@ def simulate_single_word(mot_affiche, t_decision_base):
     
     # Composantes temporelles
     t_perception = compute_perception_time()
-    t_identification = compute_identification_time(mot_affiche)
+    t_identification = compute_identification_time(mot_affiche, similarite)
     t_comparaison = compute_comparison_time(mot_affiche, similarite)
-    t_decision, t_decision_base = compute_decision_time(mot_affiche, t_decision_base)
+    t_decision, t_decision_base = compute_decision_time(mot_affiche, similarite, t_decision_base)
     t_motrice = compute_motor_time()
     
     # Temps total

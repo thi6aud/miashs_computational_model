@@ -1,31 +1,131 @@
 {
   "mot_cible": "agonisais",
   "mots_affiches": [
-    "imagées",
-    "agonisez",
-    "ggonisais",
-    "agoniser",
-    "agonitais",
-    "agonisais",
-    "agoniste",
-    "saisirais",
-    "agunisais",
-    "pétrée",
-    "soutienne",
-    "agonisais",
-    "agonisais",
-    "souffrirent",
-    "agonilais",
-    "agonisais",
-    "sionistes",
-    "ironisai",
-    "agonit",
-    "agonmsais",
-    "agonisais",
-    "agonisa",
-    "balourds",
-    "agonisiez",
-    "offrirais"
+    {
+      "mot": "imagées",
+      "est_reel": true,
+      "similarite": 0.22
+    },
+    {
+      "mot": "agonisez",
+      "est_reel": true,
+      "similarite": 0.768
+    },
+    {
+      "mot": "ggonisais",
+      "est_reel": false,
+      "similarite": 0.876
+    },
+    {
+      "mot": "agoniser",
+      "est_reel": true,
+      "similarite": 0.768
+    },
+    {
+      "mot": "agonitais",
+      "est_reel": false,
+      "similarite": 0.928
+    },
+    {
+      "mot": "agonisais",
+      "est_reel": true,
+      "similarite": 1.0
+    },
+    {
+      "mot": "agoniste",
+      "est_reel": true,
+      "similarite": 0.768
+    },
+    {
+      "mot": "saisirais",
+      "est_reel": true,
+      "similarite": 0.508
+    },
+    {
+      "mot": "agunisais",
+      "est_reel": false,
+      "similarite": 0.88
+    },
+    {
+      "mot": "pétrée",
+      "est_reel": true,
+      "similarite": 0.1
+    },
+    {
+      "mot": "soutienne",
+      "est_reel": true,
+      "similarite": 0.245
+    },
+    {
+      "mot": "agonisais",
+      "est_reel": true,
+      "similarite": 1.0
+    },
+    {
+      "mot": "agonisais",
+      "est_reel": true,
+      "similarite": 1.0
+    },
+    {
+      "mot": "souffrirent",
+      "est_reel": true,
+      "similarite": 0.18
+    },
+    {
+      "mot": "agonilais",
+      "est_reel": false,
+      "similarite": 0.928
+    },
+    {
+      "mot": "agonisais",
+      "est_reel": true,
+      "similarite": 1.0
+    },
+    {
+      "mot": "sionistes",
+      "est_reel": true,
+      "similarite": 0.591
+    },
+    {
+      "mot": "ironisai",
+      "est_reel": true,
+      "similarite": 0.708
+    },
+    {
+      "mot": "agonit",
+      "est_reel": true,
+      "similarite": 0.679
+    },
+    {
+      "mot": "agonmsais",
+      "est_reel": false,
+      "similarite": 0.926
+    },
+    {
+      "mot": "agonisais",
+      "est_reel": true,
+      "similarite": 1.0
+    },
+    {
+      "mot": "agonisa",
+      "est_reel": true,
+      "similarite": 0.939
+    },
+    {
+      "mot": "balourds",
+      "est_reel": true,
+      "similarite": 0.188
+    },
+    {
+      "mot": "agonisiez",
+      "est_reel": true,
+      "similarite": 0.762
+    },
+    {
+      "mot": "offrirais",
+      "est_reel": true,
+      "similarite": 0.5
+    }
   ],
   "seed": 104
 }

@@ -18,13 +18,14 @@ def compute_perception_time():
     return 75 + random.gauss(0, 25)
 
 
-def compute_identification_time(mot):
+def compute_identification_time(mot, similarite=0):
     """
     Temps d'identification du mot (dépend de la fréquence et longueur).
     Basé sur les lois de fréquence et longueur des mots.
     
     Args:
         mot (str): Mot à identifier
+        similarite (float): Score de similarité orthographique (0-1)
         
     Returns:
         float: Temps d'identification en ms
@@ -60,16 +61,17 @@ def compute_comparison_time(mot, similarite):
         return 30 + random.gauss(0, 10)
     else:
         # Sinon, la comparaison dépend de la similarité
-        return max(10, (similarite * 150) + random.gauss(0, 20))
+        # Augmenté de 150 à 180 pour mieux capturer l'effet de similarité
+        return max(10, (similarite * 180) + random.gauss(0, 20))
 
 
-def compute_decision_time(mot, t_decision_base):
+def compute_decision_time(mot, similarite, t_decision_base):
     """
     Temps de décision (réponse OUI/NON).
-    Plus lent pour des mots similaires au mot cible.
     
     Args:
         mot (str): Mot courant
+        similarite (float): Score de similarité orthographique (0-1)
         t_decision_base (float): Temps de décision de base
         
     Returns:
@@ -80,7 +82,7 @@ def compute_decision_time(mot, t_decision_base):
     else:
         t_dec = t_decision_base + random.gauss(0, 20)
     
-    return t_dec, t_decision_base  # Retourne aussi la base pour pouvoir la suivre
+    return t_dec, t_decision_base
 
 
 def compute_motor_time():
