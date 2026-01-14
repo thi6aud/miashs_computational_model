@@ -2,6 +2,9 @@
 resultats_simulation_*.csv
 resultats_simulation_*.json
 
+# Stimuli générés (changeant à chaque run)
+stimuli.json
+
 # Python
 __pycache__/
 *.py[cod]
