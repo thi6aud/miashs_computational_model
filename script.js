@@ -1,7 +1,7 @@
 let mots = [];
 let motCible = "";
 
-fetch("stimuli.json")
+fetch("stimuli_website.json")
   .then(response => response.json())
   .then(data => {
     mots = data.mots_affiches;
